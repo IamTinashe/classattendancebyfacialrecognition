@@ -1,0 +1,326 @@
+{% include 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Class Attendance by Facial Recognition Admin Portal</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% load static %}	
+	<link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="{% static 'js/admin.js' %}"></script>
+	<script>
+		function request_access($this){
+		    var request_data = $this.id;
+		    console.log("data: " + request_data);
+		    $.ajax({
+		        url: "/start",
+		        data : { request_data: request_data},
+		        success : function(json) {
+		            $("#request-access").hide();
+		            console.log("requested access complete");
+		        }
+		    })
+		}
+	</script>
+</head>
+<body style="background-image: url('../static/images/bg-01.jpg');">
+	<div class="container">
+		{% block nav-bar %}
+		{% endblock %}
+		<div class="content">
+			<div class="row">
+				<div class="col-md-3 admin-nav-bar">
+					<div class="control-processes button">
+						Processes
+					</div>
+					<div class="control-attendance button">
+						Mark Attendance
+					</div>
+					<div class="control-add-dept button">
+						Add Department
+					</div>
+					<div class="control-remove-dept button">
+						Remove Department
+					</div>
+					<div class="control-add-course button">
+						Add Course
+					</div>
+					<div class="control-remove-course button">
+						Remove Course
+					</div>
+					<div class="control-add-lecture button">
+						Add Lecture
+					</div>
+					<div class="control-remove-lecture button">
+						Remove Lecture
+					</div>
+					<div class="control-add-room button">
+						Add Room
+					</div>
+					<div class="control-remove-room button">
+						Remove Room
+					</div>
+					<div class="control-add-student button">
+						Add Student
+					</div>
+					<div class="control-remove-student button">
+						Remove Student
+					</div>
+				</div>
+				<div class="col-md-9 admin-excecute-task">
+					<div class="processes corresponding-function">
+						<h3>Processes</h3>
+						<p style="color:#ffffff;">Current Status : {% if Process_Status.process_status %}
+												<span style="color:green;">Running</span>
+											{% else %}
+												<span style="color:red;">Not Running</span>
+											{% endif %}</p>
+						<div class="div-content">
+							<button class="btn btn-green btn-sm" onclick="request_access(this)" id="Start_Processes"><i class="fa fa-plus"></i> Start Processes</button>
+							<a href="../end"><button class="btn btn-green btn-sm" id="End_Processes"><i class="fa fa-plus"></i> End Processes</button></a>
+						</div>
+					</div>
+					<div class="attendance corresponding-function">
+						<h3>Mark Attendance</h3>
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../search_student/" class="login100-form validate-form" id="#add_course">
+									{% csrf_token %}
+
+									<span class="form-label-input">Enter Student Number: </span>
+									<input type="text" name="std_number" class="form-control" placeholder="Student Number" required/>
+
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Search</button>
+								</form>
+							</div>
+							<div class="db-display">
+								{% for attendee in attendees %}
+									{% for lecture in lectures %}
+										{% if attendee.lecture_id ==  lecture.id %}
+											{% for course in courses %}
+												{% if lecture.course_id ==  course.id %}
+													{% for students in All_Students %}
+														{% if attendee.student_number ==  students.student_number %}
+															<div class="datalist"><div>{{ students.student_name }} {{ students.student_surname }}</div> <div>{{ lecture.date }} : {{ course.course_code }}</div></div>
+														{% endif %}
+													{% endfor %}
+												{% endif %}
+											{% endfor %}
+										{% endif %}
+									{% endfor %}
+								{% endfor %}						
+							</div>
+						</div>
+					</div>
+					<div class="add-dept corresponding-function">
+						<h3>Add Department</h3>
+
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../add_department/" class="login100-form validate-form" id="#add_department">
+									{% csrf_token %}
+									<span class="form-label-input">Enter Department: </span>
+									<input type="text" name="department" class="form-control" placeholder="Add Department" />
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Add Department</button>
+								</form>
+							</div>
+							<div class="db-display">
+								{% for department in departments %}
+									<div class="datalist">{{ department }}</div>
+								{% endfor %}						
+							</div>
+						</div>
+					</div>
+					<div class="remove-dept corresponding-function">
+						<h3>Remove Department</h3>
+					</div>
+					<div class="add-course corresponding-function">
+						<h3>Add Course</h3>
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../add_course/" class="login100-form validate-form" id="#add_course">
+									{% csrf_token %}
+									<span class="form-label-input">Select Department: </span>
+									<select class="drop-down" name="department" required>
+										{% for department in departments %}
+											<option>{{ department }}</option>
+										{% endfor %}
+									</select><br>
+
+									<span class="form-label-input">Enter Course: </span>
+									<input type="text" name="course" class="form-control" placeholder="Course Name" required/>
+
+									<span class="form-label-input">Enter Course Code: </span>
+									<input type="text" name="course_code" class="form-control" placeholder="Course Code" required/>
+
+									<span class="form-label-input">Enter Lecturer: </span>
+									<input type="text" name="lecturer" class="form-control" placeholder="Lecturer Name" required/>
+
+									<span class="form-label-input">Enter Year: </span>
+									<input type="number" name="year" class="form-control" placeholder="Year" required/>
+
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Add Course</button>
+								</form>
+							</div>
+							<div class="db-display">
+								{% for course in courses %}
+									<div class="datalist">{{ course.course_code }} : {{ course.course_name }}</div>
+								{% endfor %}						
+							</div>
+						</div>
+					</div>
+					<div class="remove-course corresponding-function">
+						<h3>Remove Course</h3>
+					</div>
+					<div class="add-lecture corresponding-function">
+						<h3>Add Lecture</h3>
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../add_lecture/" class="login100-form validate-form" id="#add_course">
+									{% csrf_token %}
+
+									<span class="form-label-input">Choose Department: </span>
+									<select class="drop-down" name="departmentid" required>
+										{% for department in departments %}
+											<option value="{{ department.id }}">{{ department }}</option>
+										{% endfor %}
+									</select><br>
+
+									<span class="form-label-input">Choose Course: </span>
+									<select class="drop-down" name="courseid" required>
+										{% for course in courses %}
+											<option value="{{ course.id }}">{{ course.course_code }} : {{ course.course_name }}</option>
+										{% endfor %}
+									</select><br>
+
+									<span class="form-label-input">Choose a Room: </span>
+									<select class="drop-down" name="roomid" required>
+										{% for room in rooms %}
+											<option value="{{ room.id }}">{{ room.building_name }} : {{ room.room_name }}</option>
+										{% endfor %}
+									</select><br>
+
+									<span class="form-label-input">Enter Date: </span>
+									<input id="date" type="date" name="date" class="form-control" required>
+
+									<span class="form-label-input">Enter Time: </span>
+									<input id="time" type="time" name="time" class="form-control" required>								
+									
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Add Course</button>
+								</form>
+							</div>
+							<div class="db-display">
+				
+									 <table style="width:100%;" >
+									  	<tr class="datalist">
+									    	<th style="text-align: center; border-right: 1px solid #a64bf4;">ID</th>
+									    	<th style="text-align: center; border-right: 1px solid #a64bf4;">Course</th>
+									    	<th style="text-align: center; border-right: 1px solid #a64bf4;">Date</th>
+									    	<th style="text-align: center; border-right: 1px solid #a64bf4;">Time</th>
+									    	<th style="text-align: center; border-right: 1px solid #a64bf4;">Duration</th>
+									 	</tr>
+									 	{% for lecture in lectures %}
+									 		<tr class="datalist" style="border-top: 2px solid #a64bf4;">
+										    	<td style="border-right: 1px solid #a64bf4;">{{ lecture.id }}</td>
+										    	{% for course in courses %}
+										    		{% if course.id ==  lecture.course_id %}
+											    		<td style="border-right: 1px solid #a64bf4;">{{ course.course_name }}</td>
+											    	{% endif %}
+											    {% endfor %}
+											    	<td style="border-right: 1px solid #a64bf4;">{{ lecture.date }}</td>
+											    	<td style="border-right: 1px solid #a64bf4;">{{ lecture.time }}</td>
+											    	<td style="border-right: 1px solid #a64bf4;">{{ lecture.duration }}</td>
+										 	</tr>
+									 	{% endfor %}
+									</table> 					
+							</div>
+						</div>
+					</div>
+					<div class="remove-lecture corresponding-function">
+						<h3>Remove Lecture</h3>
+					</div>
+					<div class="add-room corresponding-function">
+						<h3>Add Room</h3>
+
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../add_room/" class="login100-form validate-form" id="#add_course">
+									{% csrf_token %}
+
+									<span class="form-label-input">Enter Building Name: </span>
+									<input type="text" name="building" class="form-control" placeholder="Building Name" required/>
+
+									<span class="form-label-input">Enter Room Name: </span>
+									<input type="text" name="room" class="form-control" placeholder="Room Name" required/>
+
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Add Room</button>
+								</form>
+							</div>
+							<div class="db-display">
+								{% for room in rooms %}
+									<div class="datalist">{{ room.building_name }} : {{ room.room_name }}</div>
+								{% endfor %}						
+							</div>
+						</div>
+					</div>
+					<div class="remove-room corresponding-function">
+						<h3>Remove Room</h3>
+					</div>
+					<div class="add-student corresponding-function">
+						<div class="div-content">
+							<div class="form">
+								<form method="post" action="../add_student/" class="login100-form validate-form" id="add_student" enctype="multipart/form-data">
+									{% csrf_token %}
+									<span class="form-label-input">Enter Student Number: </span>
+									<input type="number" name="student_number" class="form-control" placeholder="Student Number" autocomplete="off" required/>
+
+									<span class="form-label-input">Enter Student Name: </span>
+									<input type="text" name="student_name" class="form-control" placeholder="Student Name" autocomplete="off" required/>
+
+									<span class="form-label-input">Enter Student Surname: </span>
+									<input type="text" name="student_surname" class="form-control" placeholder="Student Surname" autocomplete="off" required/>
+
+									<span class="form-label-input">Enter Student Class: </span>
+									<select class="drop-down" name="student_year" required>
+										<option value="4">4</option>
+										<option value="3">3</option>
+										<option value="2">2</option>
+										<option value="1">1</option>
+										<option value="0">Preparatory</option>
+									</select><br>
+
+									<span class="form-label-input">Choose Student Image: </span>
+									<label class="custom-file-upload">
+									    <input type="file" name="student_picture" required/>
+									    Upload Image
+									</label><br>
+
+									<span class="form-label-input">Choose Department: </span>
+									<select class="drop-down" name="departmentid" required>
+										{% for department in departments %}
+											<option value="{{ department.id }}">{{ department }}</option>
+										{% endfor %}
+									</select>
+									<button id="add-dept" type="submit" value="submit" class="admin-btn">Add Student</button>
+								</form>
+							</div>
+							<div class="db-display">
+								{% for students in All_Students %}
+									<div class="datalist"><div>{{ students.student_name }} {{ students.student_surname }}</div><div>{{ students.student_number }}</div></div>
+								{% endfor %}						
+							</div>
+						</div>
+					</div>
+					<div class="remove-student corresponding-function">
+						<h3>Remove Student</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

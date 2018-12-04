@@ -1,0 +1,94 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+  font-family: Poppins-Regular;
+  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+}
+
+@font-face {
+  font-family: Poppins-Medium;
+  src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+}
+
+@font-face {
+  font-family: Poppins-Bold;
+  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+}
+
+@font-face {
+  font-family: Poppins-SemiBold;
+  src: url('../fonts/poppins/Poppins-SemiBold.ttf'); 
+}
+
+* {
+	margin: 0px; 
+	padding: 0px; 
+	box-sizing: border-box;
+}
+
+body, html {
+	height: 100%;
+	font-family: Poppins-Regular, sans-serif;
+}
+
+/*---------------------------------------------*/
+a {
+	font-family: Poppins-Regular;
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666666;
+	margin: 0px;
+	transition: all 0.4s;
+	-webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+}
+
+a:focus {
+	outline: none !important;
+}
+
+a:hover {
+	text-decoration: none;
+  color: #a64bf4;
+}
+
+.menu{
+	margin-top: 100px;
+	text-align: center;
+}
+
+.menu .button{
+	background: #ffffff;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border: 2px solid #a64bf4;
+	font-size: 12pt;
+	font-weight: bolder;
+	width: 50%;
+	color: #ffffff;
+
+
+	background: -webkit-linear-gradient(#00dbde, #fc00ff, #00dbde, #fc00ff);
+  	background: -o-linear-gradient(#00dbde, #fc00ff, #00dbde, #fc00ff);
+  	background: -moz-linear-gradient(#00dbde, #fc00ff, #00dbde, #fc00ff);
+  	background: linear-gradient(#00dbde, #fc00ff, #00dbde, #fc00ff);
+}
+
+.menu .button:hover {
+  background: #a64bf4;
+  background: -webkit-linear-gradient(#00dbde, #fff, #00dbde, #fff);
+  background: -o-linear-gradient(#00dbde, #fff, #00dbde, #fff);
+  background: -moz-linear-gradient(#00dbde, #fff, #00dbde, #fff);
+  background: linear-gradient(#00dbde, #fff, #00dbde, #fff);
+}
+
+.menu #left-button{
+	float: right;
+	border-radius: 10px 0 0 10px;
+}
+
+.menu #right-button{
+	border-radius: 0 10px 10px 0;
+}

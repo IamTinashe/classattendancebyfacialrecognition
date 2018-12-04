@@ -1,0 +1,38 @@
+{% include 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Class Attendance by Facial Recognition Admin Portal</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% load static %}	
+	<link rel="stylesheet" type="text/css" href="{% static 'css/user.css' %}">
+</head>
+<body style="background-image: url('../static/images/bg-01.jpg');">
+	
+	
+	<div class="container">
+		{% block nav-bar %}
+		{% endblock %}
+		<div class="menu">
+		  	<div class="row">
+		    	<div class="col-md-6">
+		    		<a href="../admin">
+			    		<div class="button" id="left-button">
+			    			Admin Tools
+			    		</div>
+			    	</a>
+		    	</div>
+			    <div class="col-md-6">
+			    	<a href="../panel">
+				    	<div class="button" id="right-button">
+			    			User Panel
+			    		</div>
+			    	</a>
+			    </div>
+			  	
+		  	</div>
+		</div>
+	</div>
+</body>
+</html>
